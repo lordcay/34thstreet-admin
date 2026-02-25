@@ -1,0 +1,39 @@
+.rooms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.room-card {
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  height: 160px;
+  cursor: pointer;
+  background: #fff;
+  border: 1px solid #eee;
+}
+
+.room-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-size: cover;
+  background-position: center;
+  filter: brightness(0.6);
+}
+
+.room-overlay {
+  position: absolute;
+  inset: 12px;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.room-overlay h5 { margin: 0; }
+
+.room-overlay p { margin: 0; font-size: 12px; opacity: 0.95 }
