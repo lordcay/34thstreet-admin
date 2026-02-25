@@ -1,0 +1,53 @@
+.userCard {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.photoContainer {
+  width: 100%;
+  height: 400px;
+  background: linear-gradient(135deg, #581845 0%, #ffb60a 100%);
+  overflow: hidden;
+}
+
+.photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tag {
+  display: inline-block;
+  background-color: #f0f2f5;
+  color: #333;
+  padding: 6px 12px;
+  border-radius: 20px;
+  margin-right: 8px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid #eee;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+  padding: 16px 0;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  margin: 16px 0;
+}
+
+.infoGrid div {
+  text-align: left;
+}
+
+.infoGrid p {
+  color: #222;
+  font-weight: 600;
+  font-size: 14px;
+  margin-top: 4px;
+}
