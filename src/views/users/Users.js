@@ -47,26 +47,7 @@ export default function Users() {
     setError('')
     try {
       const response = await api.get('/accounts')
-      const raw = response.data || []
-      // Normalize user objects to a consistent shape used by this component
-      const normalized = (Array.isArray(raw) ? raw : raw.accounts || []).map((u) => ({
-        id: u._id || u.id || u._meta?.id || '',
-        firstName: u.firstName || u.firstname || u.name?.split?.(' ')?.[0] || '',
-        lastName: u.lastName || u.lastname || u.name?.split?.(' ')?.slice(1).join(' ') || '',
-        email: u.email || u.emailAddress || '',
-        phone: u.phone || u.phoneNumber || u.phone_number || '',
-        type: u.type || u.accountType || '',
-        gender: u.gender || u.sex || '',
-        verified: u.verified === true || u.verified === 'true' || u.isVerified === true || u.isVerified === 'true',
-        created: u.createdAt || u.created || u.created_at || Date.now(),
-        role: u.role || 'User',
-        bio: u.bio || '',
-        industry: u.industry || '',
-        currentRole: u.currentRole || u.current_role || '',
-        origin: u.origin || '',
-      }))
-
-      setUsers(normalized)
+      setUsers(response.data || [])
     } catch (err) {
       console.error('Error fetching users:', err)
       setError(err?.response?.data?.message || 'Failed to fetch users')
@@ -152,19 +133,7 @@ export default function Users() {
       return
     }
 
-    // html2pdf cannot render hidden elements reliably, so clone the table, make it visible,
-    // append to body, render to PDF, then remove the clone.
-    const src = document.getElementById('users-table-pdf')
-    if (!src) {
-      alert('PDF element not found')
-      return
-    }
-    const clone = src.cloneNode(true)
-    clone.style.display = 'block'
-    clone.style.padding = '20px'
-    clone.id = 'users-table-pdf-clone'
-    document.body.appendChild(clone)
-
+    const element = document.getElementById('users-table-pdf')
     const opt = {
       margin: 10,
       filename: `users_${new Date().toISOString().split('T')[0]}.pdf`,
@@ -172,16 +141,7 @@ export default function Users() {
       html2canvas: { scale: 2 },
       jsPDF: { orientation: 'landscape', unit: 'mm', format: 'a4' },
     }
-
-    html2pdf()
-      .set(opt)
-      .from(clone)
-      .save()
-      .finally(() => {
-        // cleanup
-        const c = document.getElementById('users-table-pdf-clone')
-        if (c && c.parentNode) c.parentNode.removeChild(c)
-      })
+    html2pdf().set(opt).from(element).save()
   }
 
   const handleDeleteUser = async (userId) => {
