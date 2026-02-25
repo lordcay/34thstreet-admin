@@ -21,7 +21,7 @@ import {
   CInputGroupText,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilSearch, cilDownload, cilXCircle, cilCheckAlt } from '@coreui/icons'
+import { cilSearch, cilCloudDownload, cilXCircle, cilCheckAlt } from '@coreui/icons'
 import api from 'src/api/client'
 import * as XLSX from 'xlsx'
 import html2pdf from 'html2pdf.js'
@@ -207,7 +207,7 @@ export default function Users() {
             className="me-2"
             disabled={filteredUsers.length === 0}
           >
-            <CIcon icon={cilDownload} className="me-2" />
+            <CIcon icon={cilCloudDownload} className="me-2" />
             Export to Excel
           </CButton>
           <CButton
@@ -216,7 +216,7 @@ export default function Users() {
             onClick={exportToPDF}
             disabled={filteredUsers.length === 0}
           >
-            <CIcon icon={cilDownload} className="me-2" />
+            <CIcon icon={cilCloudDownload} className="me-2" />
             Export to PDF
           </CButton>
           <CButton color="info" size="sm" onClick={fetchUsers} className="float-end">

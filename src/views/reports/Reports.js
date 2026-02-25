@@ -28,7 +28,7 @@ import {
   CListGroupItem,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilSearch, cilDownload, cilInfo } from '@coreui/icons'
+import { cilSearch, cilCloudDownload, cilInfo } from '@coreui/icons'
 import { fetchReports, updateReportStatus } from 'src/api/reports'
 import * as XLSX from 'xlsx'
 import html2pdf from 'html2pdf.js'
@@ -285,7 +285,7 @@ export default function Reports() {
             className="me-2"
             disabled={filteredReports.length === 0}
           >
-            <CIcon icon={cilDownload} className="me-2" />
+            <CIcon icon={cilCloudDownload} className="me-2" />
             Export to Excel
           </CButton>
           <CButton
@@ -295,7 +295,7 @@ export default function Reports() {
             className="me-2"
             disabled={filteredReports.length === 0}
           >
-            <CIcon icon={cilDownload} className="me-2" />
+            <CIcon icon={cilCloudDownload} className="me-2" />
             Export to PDF
           </CButton>
           <CButton color="info" size="sm" onClick={load} className="float-end">
