@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import {
   CCard,
   CCardBody,
-  CCardHeader,
   CButton,
   CButtonGroup,
   CRow,
@@ -13,10 +12,9 @@ import {
   CListGroup,
   CListGroupItem,
   CBadge,
-  CModalLarge,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilThumbsUp, cilThumbsDown, cilComments, cilRefresh } from '@coreui/icons'
+import { cilThumbUp, cilThumbDown, cilCommentSquare, cilReload } from '@coreui/icons'
 import { fetchTodayGist, voteOnGist, fetchGistComments, addGistComment } from 'src/api/gist'
 import styles from './GistPage.module.css'
 
@@ -115,7 +113,7 @@ export default function GistPage() {
       <div className="text-center mt-4">
         <CAlert color="info">No gist available today</CAlert>
         <CButton color="primary" onClick={loadTodayGist}>
-          <CIcon icon={cilRefresh} className="me-2" />
+          <CIcon icon={cilReload} className="me-2" />
           Try Again
         </CButton>
       </div>
@@ -133,7 +131,7 @@ export default function GistPage() {
           <div className={styles.header}>
             <h2>Today's Gist</h2>
             <CButton color="secondary" size="sm" onClick={loadTodayGist} variant="outline">
-              <CIcon icon={cilRefresh} />
+              <CIcon icon={cilReload} />
             </CButton>
           </div>
         </CCol>
@@ -175,7 +173,7 @@ export default function GistPage() {
                     onClick={() => handleVote('agree')}
                     className={styles.voteButton}
                   >
-                    <CIcon icon={cilThumbsUp} className="me-2" />
+                    <CIcon icon={cilThumbUp} className="me-2" />
                     Agree
                     <CBadge color="light" className="ms-2 text-dark">
                       {agreeCount}
@@ -188,7 +186,7 @@ export default function GistPage() {
                     onClick={() => handleVote('disagree')}
                     className={styles.voteButton}
                   >
-                    <CIcon icon={cilThumbsDown} className="me-2" />
+                    <CIcon icon={cilThumbDown} className="me-2" />
                     Disagree
                     <CBadge color="light" className="ms-2 text-dark">
                       {disagreeCount}
@@ -220,7 +218,7 @@ export default function GistPage() {
                   onClick={loadComments}
                   className="w-100 mb-3"
                 >
-                  <CIcon icon={cilComments} className="me-2" />
+                  <CIcon icon={cilCommentSquare} className="me-2" />
                   {showComments ? 'Hide' : 'Show'} Comments ({comments.length})
                 </CButton>
 

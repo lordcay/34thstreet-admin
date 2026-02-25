@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { CCard, CCardBody, CCardHeader, CRow, CCol, CSpinner, CAlert, CButton } from '@coreui/react'
 import { fetchChatRooms } from 'src/api/chatrooms'
-import './ChatRooms.module.css'
+import styles from './ChatRooms.module.css'
 
 export default function ChatRooms() {
   const [rooms, setRooms] = useState([])
@@ -43,11 +43,11 @@ export default function ChatRooms() {
               <strong>Community Chat Rooms</strong>
             </CCardHeader>
             <CCardBody>
-              <div className="rooms-grid">
+              <div className={styles.roomsGrid}>
                 {rooms.map((room) => (
-                  <div className="room-card" key={room._id || room.id} onClick={() => openRoom(room._id || room.id)}>
-                    <div className="room-bg" style={{ backgroundImage: `url(${room.image || ''})` }} />
-                    <div className="room-overlay">
+                  <div className={styles.roomCard} key={room._id || room.id} onClick={() => openRoom(room._id || room.id)}>
+                    <div className={styles.roomBg} style={{ backgroundImage: `url(${room.image || ''})` }} />
+                    <div className={styles.roomOverlay}>
                       <h5>{room.name}</h5>
                       <p className="small text-muted">{room.description}</p>
                       <CButton size="sm" color="light">Enter</CButton>

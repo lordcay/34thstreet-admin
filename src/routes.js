@@ -33,6 +33,13 @@ import React from 'react'
 import ProtectedRoute from './components/ProtectedRoute'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
+const HomePage = React.lazy(() => import('./views/homepage/HomePage'))
+const GistPage = React.lazy(() => import('./views/gist/GistPage'))
+const ChatPage = React.lazy(() => import('./views/chat/ChatPage'))
+const ChatRooms = React.lazy(() => import('./views/chatrooms/ChatRooms'))
+const ChatRoom = React.lazy(() => import('./views/chatrooms/ChatRoom'))
+const PrivateChat = React.lazy(() => import('./views/chat/PrivateChat'))
+const Profile = React.lazy(() => import('./views/profile/Profile'))
 const Users = React.lazy(() => import('./views/users/Users'))
 const Reports = React.lazy(() => import('./views/reports/Reports'))
 const Blocks = React.lazy(() => import('./views/blocks/Blocks'))
@@ -49,6 +56,69 @@ const routes = [
   { path: '/login', name: 'Login', element: Login },
 
   // ✅ Protected routes
+  {
+    path: '/home',
+    name: 'Home',
+    element: () => (
+      <ProtectedRoute>
+        <HomePage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/gist',
+    name: 'Gist',
+    element: () => (
+      <ProtectedRoute>
+        <GistPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/chat',
+    name: 'Chat',
+    element: () => (
+      <ProtectedRoute>
+        <ChatPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/chatrooms',
+    name: 'Chat Rooms',
+    element: () => (
+      <ProtectedRoute>
+        <ChatRooms />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/chatroom/:chatroomId',
+    name: 'Chat Room',
+    element: () => (
+      <ProtectedRoute>
+        <ChatRoom />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/private-chat/:otherUserId',
+    name: 'Private Chat',
+    element: () => (
+      <ProtectedRoute>
+        <PrivateChat />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    element: () => (
+      <ProtectedRoute>
+        <Profile />
+      </ProtectedRoute>
+    ),
+  },
   {
     path: '/dashboard',
     name: 'Dashboard',

@@ -1,0 +1,38 @@
+.messagesPane {
+  height: 60vh;
+  overflow-y: auto;
+  padding: 12px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.rowMine {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-bottom: 10px;
+}
+
+.rowOther {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.bubbleMine {
+  max-width: 75%;
+  background: #581845;
+  color: #fff;
+  padding: 10px 12px;
+  border-radius: 12px 12px 4px 12px;
+}
+
+.bubbleOther {
+  max-width: 75%;
+  background: #e9ecef;
+  color: #222;
+  padding: 10px 12px;
+  border-radius: 12px 12px 12px 4px;
+}

@@ -18,6 +18,7 @@ import CIcon from '@coreui/icons-react'
 import { cilSearch, cilUser, cilEnvelopeOpen } from '@coreui/icons'
 import { fetchUserConversations } from 'src/api/messages'
 import { UnreadContext } from 'src/context/UnreadContext'
+import { getCurrentUserId } from 'src/utils/auth'
 
 export default function ChatPage() {
   const [conversations, setConversations] = useState([])
@@ -34,7 +35,11 @@ export default function ChatPage() {
     setLoading(true)
     setError('')
     try {
-      const userId = localStorage.getItem('adminId') || ''
+      const userId = getCurrentUserId()
+      if (!userId) {
+        setError('Unable to identify current user. Please login again.')
+        return
+      }
       const res = await fetchUserConversations(userId)
       const data = Array.isArray(res) ? res : res.conversations || res.messages || []
       setConversations(data)

@@ -16,7 +16,7 @@ import {
   CCollapse,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilChevronDown, cilMessageSquare, cilUser, cilX } from '@coreui/icons'
+import { cilCommentSquare, cilUser, cilX } from '@coreui/icons'
 import api from 'src/api/client'
 import styles from './HomePage.module.css'
 
@@ -152,7 +152,6 @@ export default function HomePage() {
                 variant="outline"
                 onClick={() => setShowFilters(!showFilters)}
               >
-                <CIcon icon={cilChevronDown} className="me-2" />
                 {showFilters ? 'Hide' : 'Show'} Filters
               </CButton>
             </CCardHeader>
@@ -307,7 +306,7 @@ export default function HomePage() {
                   className="flex-grow-1"
                   title="Send message"
                 >
-                  <CIcon icon={cilMessageSquare} /> Message
+                  <CIcon icon={cilCommentSquare} /> Message
                 </CButton>
               </CButtonGroup>
 

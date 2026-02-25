@@ -2,9 +2,13 @@ import React from 'react'
 import CIcon from '@coreui/icons-react'
 import {
   cilSpeedometer,
+  cilHome,
   cilPeople,
   cilBell,
   cilSpeech,
+  cilCommentSquare,
+  cilList,
+  cilUser,
   cilBan,
   cilSettings,
   cilShieldAlt,
@@ -22,6 +26,36 @@ const _nav = [
   {
     component: 'CNavTitle',
     name: 'Community',
+  },
+  {
+    component: 'CNavItem',
+    name: 'Home',
+    to: '/home',
+    icon: <CIcon icon={cilHome} customClassName="nav-icon" />,
+  },
+  {
+    component: 'CNavItem',
+    name: 'Gist',
+    to: '/gist',
+    icon: <CIcon icon={cilSpeech} customClassName="nav-icon" />,
+  },
+  {
+    component: 'CNavItem',
+    name: 'Chat',
+    to: '/chat',
+    icon: <CIcon icon={cilCommentSquare} customClassName="nav-icon" />,
+  },
+  {
+    component: 'CNavItem',
+    name: 'ChatRooms',
+    to: '/chatrooms',
+    icon: <CIcon icon={cilList} customClassName="nav-icon" />,
+  },
+  {
+    component: 'CNavItem',
+    name: 'Profile',
+    to: '/profile',
+    icon: <CIcon icon={cilUser} customClassName="nav-icon" />,
   },
   {
     component: 'CNavItem',

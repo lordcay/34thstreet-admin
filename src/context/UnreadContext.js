@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react'
 import { fetchUserConversations } from 'src/api/messages'
+import { getCurrentUserId } from 'src/utils/auth'
 
 export const UnreadContext = createContext({ counts: {}, refresh: () => {} })
 
@@ -8,7 +9,7 @@ export function UnreadProvider({ children }) {
 
   const refresh = async () => {
     try {
-      const userId = localStorage.getItem('adminId')
+      const userId = getCurrentUserId()
       if (!userId) return
       const res = await fetchUserConversations(userId)
       // expect res to be array of conversations

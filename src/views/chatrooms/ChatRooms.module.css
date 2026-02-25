@@ -1,10 +1,10 @@
-.rooms-grid {
+.roomsGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 16px;
 }
 
-.room-card {
+.roomCard {
   border-radius: 10px;
   overflow: hidden;
   position: relative;
@@ -14,7 +14,7 @@
   border: 1px solid #eee;
 }
 
-.room-bg {
+.roomBg {
   position: absolute;
   top: 0;
   left: 0;
@@ -25,7 +25,7 @@
   filter: brightness(0.6);
 }
 
-.room-overlay {
+.roomOverlay {
   position: absolute;
   inset: 12px;
   color: #fff;
@@ -34,6 +34,6 @@
   justify-content: space-between;
 }
 
-.room-overlay h5 { margin: 0; }
+.roomOverlay h5 { margin: 0; }
 
-.room-overlay p { margin: 0; font-size: 12px; opacity: 0.95 }
+.roomOverlay p { margin: 0; font-size: 12px; opacity: 0.95 }
