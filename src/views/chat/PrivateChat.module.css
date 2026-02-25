@@ -36,3 +36,29 @@
   padding: 10px 12px;
   border-radius: 12px 12px 12px 4px;
 }
+
+.typing {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #6c757d;
+}
+
+.replyBox {
+  border-left: 3px solid #adb5bd;
+  padding-left: 8px;
+  margin-bottom: 8px;
+  opacity: 0.9;
+}
+
+.replyPreview {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border: 1px solid #e9ecef;
+  border-left: 4px solid #581845;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+  background: #f8f9fa;
+}

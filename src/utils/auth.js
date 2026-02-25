@@ -29,3 +29,22 @@ export const getCurrentUserId = () => {
     return ''
   }
 }
+
+export const getCurrentUserName = () => {
+  const userJsonKeys = ['adminUser', 'user', 'currentUser']
+  for (const key of userJsonKeys) {
+    const raw = localStorage.getItem(key)
+    if (!raw) continue
+    try {
+      const parsed = JSON.parse(raw)
+      const first = parsed?.firstName || parsed?.firstname || ''
+      const last = parsed?.lastName || parsed?.lastname || ''
+      const full = `${first} ${last}`.trim()
+      if (full) return full
+      if (parsed?.name) return parsed.name
+    } catch {
+      // ignore malformed JSON
+    }
+  }
+  return 'User'
+}

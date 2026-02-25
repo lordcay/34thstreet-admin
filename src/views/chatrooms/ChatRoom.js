@@ -2,18 +2,22 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { CCard, CCardBody, CCardHeader, CButton, CFormInput, CSpinner, CAlert } from '@coreui/react'
 import { fetchChatRoomMessages, sendChatRoomMessage } from 'src/api/chatrooms'
-import { getCurrentUserId } from 'src/utils/auth'
+import { getCurrentUserId, getCurrentUserName } from 'src/utils/auth'
 import { getSocket } from 'src/socket'
 
 export default function ChatRoom() {
   const { chatroomId } = useParams()
   const userId = useMemo(() => getCurrentUserId(), [])
+  const userName = useMemo(() => getCurrentUserName(), [])
   const [messages, setMessages] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [text, setText] = useState('')
   const [sending, setSending] = useState(false)
+  const [typingLabel, setTypingLabel] = useState('')
+  const [replyTo, setReplyTo] = useState(null)
   const bottomRef = useRef(null)
+  const typingTimeoutRef = useRef(null)
 
   useEffect(() => {
     loadMessages()
@@ -30,11 +34,26 @@ export default function ChatRoom() {
       }
     }
 
+    const onUserTyping = (payload) => {
+      if (String(payload?.chatroomId) !== String(chatroomId)) return
+      if (String(payload?.userId) === String(userId)) return
+      setTypingLabel(payload?.senderName || 'Someone')
+    }
+
+    const onUserStoppedTyping = (payload) => {
+      if (String(payload?.chatroomId) !== String(chatroomId)) return
+      setTypingLabel('')
+    }
+
     socket.on('newChatroomMessage', onNew)
+    socket.on('userTyping', onUserTyping)
+    socket.on('userStoppedTyping', onUserStoppedTyping)
 
     return () => {
       socket.emit('leaveChatroom', { chatroomId, userId })
       socket.off('newChatroomMessage', onNew)
+      socket.off('userTyping', onUserTyping)
+      socket.off('userStoppedTyping', onUserStoppedTyping)
     }
   }, [chatroomId, userId])
 
@@ -63,6 +82,15 @@ export default function ChatRoom() {
       chatroomId,
       message: text.trim(),
       senderId: userId,
+      senderName: userName,
+      replyTo: replyTo
+        ? {
+            _id: replyTo._id,
+            senderId: replyTo?.senderId?._id || replyTo?.senderId,
+            senderName: replyTo?.senderName || 'User',
+            message: replyTo?.message,
+          }
+        : undefined,
     }
 
     setSending(true)
@@ -71,7 +99,9 @@ export default function ChatRoom() {
       const created = res?.message || res
       setMessages((prev) => [...prev, created])
       getSocket().emit('sendChatroomMessage', payload)
+      getSocket().emit('stopTyping', { chatroomId, userId, senderName: userName })
       setText('')
+      setReplyTo(null)
     } catch (e) {
       console.error(e)
       setError('Failed to send message')
@@ -103,7 +133,11 @@ export default function ChatRoom() {
               const senderId = item?.senderId?._id || item?.senderId
               const mine = String(senderId) === String(userId)
               return (
-                <div key={item._id || `${index}-${item.createdAt || ''}`} className={mine ? 'text-end mb-2' : 'text-start mb-2'}>
+                <div
+                  key={item._id || `${index}-${item.createdAt || ''}`}
+                  className={mine ? 'text-end mb-2' : 'text-start mb-2'}
+                  onDoubleClick={() => setReplyTo(item)}
+                >
                   <div
                     style={{
                       display: 'inline-block',
@@ -114,6 +148,12 @@ export default function ChatRoom() {
                       borderRadius: 12,
                     }}
                   >
+                    {item.replyTo && (
+                      <div style={{ borderLeft: '3px solid #adb5bd', paddingLeft: 8, marginBottom: 8, opacity: 0.9 }}>
+                        <small className="text-muted d-block">Replying to {item.replyTo?.senderName || 'User'}</small>
+                        <small>{item.replyTo?.message}</small>
+                      </div>
+                    )}
                     {item.message}
                   </div>
                   <div>
@@ -125,14 +165,37 @@ export default function ChatRoom() {
               )
             })
           )}
+          {typingLabel && <div className="text-muted small mt-2">{typingLabel} is typing...</div>}
           <div ref={bottomRef} />
         </div>
+
+        {replyTo && (
+          <div className="mt-2 p-2 border rounded d-flex justify-content-between align-items-center" style={{ borderLeft: '4px solid #581845' }}>
+            <div>
+              <small className="text-muted">Replying to {replyTo?.senderName || 'User'}</small>
+              <div className="small">{replyTo?.message}</div>
+            </div>
+            <CButton color="light" size="sm" onClick={() => setReplyTo(null)}>
+              Cancel
+            </CButton>
+          </div>
+        )}
 
         <div className="d-flex gap-2 mt-3">
           <CFormInput
             placeholder="Type a room message..."
             value={text}
-            onChange={(e) => setText(e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value
+              setText(value)
+
+              const socket = getSocket()
+              socket.emit('userTyping', { chatroomId, userId, senderName: userName })
+              if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current)
+              typingTimeoutRef.current = setTimeout(() => {
+                socket.emit('stopTyping', { chatroomId, userId, senderName: userName })
+              }, 1200)
+            }}
             onKeyDown={(e) => {
               if (e.key === 'Enter') handleSend()
             }}

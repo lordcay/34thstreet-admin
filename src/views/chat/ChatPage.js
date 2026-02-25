@@ -15,7 +15,7 @@ import {
   CBadge,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilSearch, cilUser, cilEnvelopeOpen } from '@coreui/icons'
+import { cilSearch } from '@coreui/icons'
 import { fetchUserConversations } from 'src/api/messages'
 import { UnreadContext } from 'src/context/UnreadContext'
 import { getCurrentUserId } from 'src/utils/auth'
@@ -59,6 +59,23 @@ export default function ChatPage() {
     return name.includes(query.toLowerCase()) || email.includes(query.toLowerCase())
   })
 
+  const sorted = [...filtered].sort((a, b) => {
+    const aOther = a.otherUser || a.participant || a.user || {}
+    const bOther = b.otherUser || b.participant || b.user || {}
+    const aId = aOther._id || aOther.id || aOther
+    const bId = bOther._id || bOther.id || bOther
+
+    const aUnread = counts[aId] || a.unreadCount || a.unread || 0
+    const bUnread = counts[bId] || b.unreadCount || b.unread || 0
+    if (aUnread !== bUnread) return bUnread - aUnread
+
+    const aTime = new Date(a.updatedAt || a.lastAt || a.lastMessageAt || 0).getTime()
+    const bTime = new Date(b.updatedAt || b.lastAt || b.lastMessageAt || 0).getTime()
+    return bTime - aTime
+  })
+
+  const unreadTotal = Object.values(counts).reduce((sum, n) => sum + (Number(n) || 0), 0)
+
   const openConversation = (conv) => {
     const other = conv.otherUser || conv.participant || conv.user || {}
     const otherId = other._id || other.id || other
@@ -88,16 +105,17 @@ export default function ChatPage() {
         </CCol>
       </CRow>
 
-      {filtered.length === 0 ? (
+      {sorted.length === 0 ? (
         <CAlert color="info">No conversations found.</CAlert>
       ) : (
         <CCard>
-          <CCardHeader>
+          <CCardHeader className="d-flex justify-content-between align-items-center">
             <strong>Direct Messages</strong>
+            {unreadTotal > 0 && <CBadge color="danger">{unreadTotal} unread</CBadge>}
           </CCardHeader>
           <CCardBody>
             <CListGroup>
-              {filtered.map((conv) => {
+              {sorted.map((conv) => {
                 const other = conv.otherUser || conv.participant || conv.user || {}
                 const name = `${other.firstName || ''} ${other.lastName || ''}`.trim() || other.email || 'Unknown'
                 const last = conv.lastMessage || conv.last || conv.preview || ''
