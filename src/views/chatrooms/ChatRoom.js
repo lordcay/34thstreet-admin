@@ -1,9 +1,12 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { CCard, CCardBody, CCardHeader, CButton, CFormInput, CSpinner, CAlert } from '@coreui/react'
+import { CCard, CCardBody, CButton, CFormInput, CSpinner, CAlert } from '@coreui/react'
+import CIcon from '@coreui/icons-react'
+import { cilReload, cilPaperPlane } from '@coreui/icons'
 import { fetchChatRoomMessages, sendChatRoomMessage } from 'src/api/chatrooms'
 import { getCurrentUserId, getCurrentUserName } from 'src/utils/auth'
 import { getSocket } from 'src/socket'
+import styles from './ChatRoom.module.css'
 
 export default function ChatRoom() {
   const { chatroomId } = useParams()
@@ -19,6 +22,45 @@ export default function ChatRoom() {
   const bottomRef = useRef(null)
   const typingTimeoutRef = useRef(null)
 
+  const asId = (value) => {
+    if (!value) return ''
+    if (typeof value === 'string' || typeof value === 'number') return String(value)
+    return String(value?._id || value?.id || '')
+  }
+
+  const asText = (value) => {
+    if (!value) return ''
+    if (typeof value === 'string') return value.trim()
+    return String(value).trim()
+  }
+
+  const isDuplicateMessage = (left, right) => {
+    const leftId = asId(left?._id || left?.id || left?.messageId)
+    const rightId = asId(right?._id || right?.id || right?.messageId)
+    if (leftId && rightId && leftId === rightId) return true
+
+    const leftSenderId = asId(left?.senderId)
+    const rightSenderId = asId(right?.senderId)
+    if (!leftSenderId || !rightSenderId || leftSenderId !== rightSenderId) return false
+
+    const leftMessage = asText(left?.message || left?.text || left?.content)
+    const rightMessage = asText(right?.message || right?.text || right?.content)
+    if (!leftMessage || !rightMessage || leftMessage !== rightMessage) return false
+
+    const leftTime = new Date(left?.createdAt || left?.updatedAt || left?.timestamp || 0).getTime()
+    const rightTime = new Date(right?.createdAt || right?.updatedAt || right?.timestamp || 0).getTime()
+    if (!leftTime || !rightTime) return Boolean(left?._optimistic || right?._optimistic)
+
+    return Math.abs(leftTime - rightTime) <= 15000
+  }
+
+  const formatTime = (value) => {
+    if (!value) return ''
+    const date = new Date(value)
+    if (Number.isNaN(date.getTime())) return ''
+    return date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })
+  }
+
   useEffect(() => {
     loadMessages()
   }, [chatroomId])
@@ -29,9 +71,17 @@ export default function ChatRoom() {
     socket.emit('joinChatroom', { chatroomId, userId })
 
     const onNew = (payload) => {
-      if (String(payload?.chatroomId || payload?.roomId) === String(chatroomId)) {
-        setMessages((prev) => [...prev, payload])
-      }
+      if (String(payload?.chatroomId || payload?.roomId) !== String(chatroomId)) return
+      setMessages((prev) => {
+        const duplicateIndex = prev.findIndex((item) => isDuplicateMessage(item, payload))
+        if (duplicateIndex >= 0) {
+          const next = [...prev]
+          next[duplicateIndex] = { ...next[duplicateIndex], ...payload, _optimistic: false }
+          return next
+        }
+
+        return [...prev, { ...payload, _optimistic: false }]
+      })
     }
 
     const onUserTyping = (payload) => {
@@ -78,9 +128,16 @@ export default function ChatRoom() {
 
   const handleSend = async () => {
     if (!text.trim() || !userId) return
+    setError('')
+    const messageText = text.trim()
+    const optimisticId = `optimistic-${Date.now()}`
+
     const payload = {
       chatroomId,
-      message: text.trim(),
+      roomId: chatroomId,
+      message: messageText,
+      text: messageText,
+      content: messageText,
       senderId: userId,
       senderName: userName,
       replyTo: replyTo
@@ -93,35 +150,69 @@ export default function ChatRoom() {
         : undefined,
     }
 
+    const optimisticMessage = {
+      _id: optimisticId,
+      chatroomId,
+      roomId: chatroomId,
+      senderId: userId,
+      senderName: userName,
+      message: messageText,
+      text: messageText,
+      createdAt: new Date().toISOString(),
+      replyTo: payload.replyTo,
+      _optimistic: true,
+    }
+
+    setMessages((prev) => [...prev, optimisticMessage])
+    getSocket().emit('sendChatroomMessage', payload)
+    getSocket().emit('stopTyping', { chatroomId, roomId: chatroomId, userId, senderName: userName })
+    setText('')
+    setReplyTo(null)
+
     setSending(true)
     try {
       const res = await sendChatRoomMessage(payload)
-      const created = res?.message || res
-      setMessages((prev) => [...prev, created])
-      getSocket().emit('sendChatroomMessage', payload)
-      getSocket().emit('stopTyping', { chatroomId, userId, senderName: userName })
-      setText('')
-      setReplyTo(null)
+      const created = res?.message || res?.data || res
+      setMessages((prev) => {
+        const withoutOptimistic = prev.filter((item) => String(item?._id || '') !== optimisticId)
+
+        const duplicateIndex = withoutOptimistic.findIndex((item) => isDuplicateMessage(item, created))
+        if (duplicateIndex >= 0) {
+          const next = [...withoutOptimistic]
+          next[duplicateIndex] = { ...next[duplicateIndex], ...created, _optimistic: false }
+          return next
+        }
+
+        return [...withoutOptimistic, { ...created, _optimistic: false }]
+      })
     } catch (e) {
       console.error(e)
-      setError('Failed to send message')
+      // keep optimistic + socket send as fallback so message still appears and can propagate in real time
+      const apiMessage = e?.response?.data?.message || e?.response?.data?.error || ''
+      if (apiMessage) {
+        setError(`Message sent via realtime fallback. API warning: ${apiMessage}`)
+      }
     } finally {
       setSending(false)
     }
   }
 
   return (
-    <CCard>
-      <CCardHeader className="d-flex justify-content-between align-items-center">
-        <strong>Chat Room</strong>
-        <CButton color="secondary" size="sm" onClick={loadMessages} disabled={loading}>
-          Refresh
-        </CButton>
-      </CCardHeader>
-      <CCardBody>
+    <CCard className={styles.roomCard}>
+      <CCardBody className={styles.roomBody}>
+        <div className={styles.topBar}>
+          <div>
+            <h4 className={styles.roomTitle}>Chat Room</h4>
+            <p className={styles.roomSubtitle}>Community conversation in real time</p>
+          </div>
+          <CButton color="light" className={styles.refreshBtn} onClick={loadMessages} disabled={loading}>
+            <CIcon icon={cilReload} />
+          </CButton>
+        </div>
+
         {error && <CAlert color="danger">{error}</CAlert>}
 
-        <div style={{ height: '60vh', overflowY: 'auto', border: '1px solid #eee', borderRadius: 8, padding: 12 }}>
+        <div className={styles.messagesPane}>
           {loading ? (
             <div className="text-center py-4">
               <CSpinner color="primary" />
@@ -135,45 +226,32 @@ export default function ChatRoom() {
               return (
                 <div
                   key={item._id || `${index}-${item.createdAt || ''}`}
-                  className={mine ? 'text-end mb-2' : 'text-start mb-2'}
+                  className={mine ? styles.rowMine : styles.rowOther}
                   onDoubleClick={() => setReplyTo(item)}
                 >
-                  <div
-                    style={{
-                      display: 'inline-block',
-                      maxWidth: '75%',
-                      background: mine ? '#581845' : '#e9ecef',
-                      color: mine ? '#fff' : '#222',
-                      padding: '10px 12px',
-                      borderRadius: 12,
-                    }}
-                  >
+                  <div className={mine ? styles.bubbleMine : styles.bubbleOther}>
                     {item.replyTo && (
-                      <div style={{ borderLeft: '3px solid #adb5bd', paddingLeft: 8, marginBottom: 8, opacity: 0.9 }}>
+                      <div className={styles.replyBox}>
                         <small className="text-muted d-block">Replying to {item.replyTo?.senderName || 'User'}</small>
                         <small>{item.replyTo?.message}</small>
                       </div>
                     )}
                     {item.message}
                   </div>
-                  <div>
-                    <small className="text-muted">
-                      {item.createdAt ? new Date(item.createdAt).toLocaleTimeString() : ''}
-                    </small>
-                  </div>
+                  <small className={styles.msgMeta}>{formatTime(item.createdAt)}</small>
                 </div>
               )
             })
           )}
-          {typingLabel && <div className="text-muted small mt-2">{typingLabel} is typing...</div>}
+          {typingLabel && <div className={styles.typing}>{typingLabel} is typing...</div>}
           <div ref={bottomRef} />
         </div>
 
         {replyTo && (
-          <div className="mt-2 p-2 border rounded d-flex justify-content-between align-items-center" style={{ borderLeft: '4px solid #581845' }}>
+          <div className={styles.replyPreview}>
             <div>
-              <small className="text-muted">Replying to {replyTo?.senderName || 'User'}</small>
-              <div className="small">{replyTo?.message}</div>
+              <small className={styles.replyLabel}>Replying to {replyTo?.senderName || 'User'}</small>
+              <div className={styles.replyText}>{replyTo?.message}</div>
             </div>
             <CButton color="light" size="sm" onClick={() => setReplyTo(null)}>
               Cancel
@@ -181,10 +259,11 @@ export default function ChatRoom() {
           </div>
         )}
 
-        <div className="d-flex gap-2 mt-3">
+        <div className={styles.composerRow}>
           <CFormInput
             placeholder="Type a room message..."
             value={text}
+            className={styles.composerInput}
             onChange={(e) => {
               const value = e.target.value
               setText(value)
@@ -200,8 +279,8 @@ export default function ChatRoom() {
               if (e.key === 'Enter') handleSend()
             }}
           />
-          <CButton color="primary" onClick={handleSend} disabled={sending || !text.trim()}>
-            {sending ? 'Sending...' : 'Send'}
+          <CButton className={styles.sendBtn} onClick={handleSend} disabled={sending || !text.trim()}>
+            {sending ? 'Sending...' : <CIcon icon={cilPaperPlane} />}
           </CButton>
         </div>
       </CCardBody>

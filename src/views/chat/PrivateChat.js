@@ -56,6 +56,23 @@ export default function PrivateChat() {
     }
   }
 
+  const extractRealtimeMessage = (payload) => {
+    if (!payload) return null
+
+    const candidate =
+      payload?.message && typeof payload.message === 'object' && !Array.isArray(payload.message)
+        ? payload.message
+        : payload
+
+    const normalized = normalizeMessage(candidate)
+    if (!normalized?.message || typeof normalized.message !== 'string') return null
+
+    if (!normalized.senderId && payload?.senderId) normalized.senderId = payload.senderId
+    if (!normalized.recipientId && payload?.recipientId) normalized.recipientId = payload.recipientId
+
+    return normalized
+  }
+
   const extractMessages = (payload) => {
     if (Array.isArray(payload)) return payload
     if (Array.isArray(payload?.messages)) return payload.messages
@@ -80,8 +97,8 @@ export default function PrivateChat() {
     const socket = getSocket()
 
     const onNew = (incomingRaw) => {
-      const incoming = normalizeMessage(incomingRaw)
-      if (!incoming?.message) return
+      const incoming = extractRealtimeMessage(incomingRaw)
+      if (!incoming) return
 
       const senderId = asId(incoming?.senderId)
       const recipientId = asId(incoming?.recipientId)
@@ -92,6 +109,21 @@ export default function PrivateChat() {
 
       if (isRelevant) {
         setMessages((prev) => {
+          const optimisticIndex = prev.findIndex((item) => {
+            if (!item?._optimistic) return false
+            const samePair =
+              asId(item?.senderId) === senderId && asId(item?.recipientId) === recipientId
+            const sameMessage = String(item?.message || '') === String(incoming?.message || '')
+            return samePair && sameMessage
+          })
+
+          if (optimisticIndex >= 0) {
+            const next = [...prev]
+            next[optimisticIndex] = { ...incoming, _optimistic: false }
+            next.sort((a, b) => new Date(a?.createdAt || 0) - new Date(b?.createdAt || 0))
+            return next
+          }
+
           const incomingId = incoming?._id ? String(incoming._id) : ''
           const exists = incomingId
             ? prev.some((item) => String(item?._id || '') === incomingId)
@@ -280,6 +312,14 @@ export default function PrivateChat() {
     try {
       const res = await sendPrivateMessage(payload)
       const created = normalizeMessage(res?.message || res)
+
+      if (!created?.message) {
+        setText('')
+        setReplyTo(null)
+        setError('')
+        return
+      }
+
       setMessages((prev) => {
         const withoutOptimistic = prev.filter((item) => String(item?._id || '') !== optimisticId)
         const messageId = created?._id ? String(created._id) : ''

@@ -1,39 +1,158 @@
+.chatRoomsCard {
+  border: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 14px 32px rgba(17, 24, 39, 0.08);
+}
+
+.chatRoomsBody {
+  padding: 14px;
+  background: #f6f2f8;
+}
+
+.heroBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #581845 0%, #7a275f 62%, #ffb60a 165%);
+  margin-bottom: 12px;
+}
+
+.heroTitle {
+  margin: 0;
+  color: #fff;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.heroSubtitle {
+  margin: 4px 0 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 13px;
+}
+
+.refreshBtn {
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: #fff !important;
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .roomsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
 }
 
 .roomCard {
-  border-radius: 10px;
+  border-radius: 14px;
   overflow: hidden;
-  position: relative;
-  height: 160px;
-  cursor: pointer;
   background: #fff;
-  border: 1px solid #eee;
-}
-
-.roomBg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-size: cover;
-  background-position: center;
-  filter: brightness(0.6);
-}
-
-.roomOverlay {
-  position: absolute;
-  inset: 12px;
-  color: #fff;
+  border: 1px solid #eaddea;
+  box-shadow: 0 8px 18px rgba(88, 24, 69, 0.08);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 }
 
-.roomOverlay h5 { margin: 0; }
+.roomCoverWrap {
+  position: relative;
+  height: 170px;
+}
 
-.roomOverlay p { margin: 0; font-size: 12px; opacity: 0.95 }
+.roomCover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.roomCoverOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(29, 11, 27, 0.06) 0%, rgba(29, 11, 27, 0.38) 100%);
+}
+
+.roomContent {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.roomName {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #2c2233;
+}
+
+.roomDescription {
+  margin: 0;
+  min-height: 36px;
+  color: #645a70;
+  font-size: 13px;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.roomMeta {
+  margin: 0;
+  font-size: 12px;
+  color: #8a7b95;
+  font-weight: 600;
+}
+
+.actionRow {
+  margin-top: 6px;
+  display: flex;
+  gap: 8px;
+}
+
+.enterBtn {
+  flex: 1;
+  background: #581845 !important;
+  border-color: #581845 !important;
+  color: #fff !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-weight: 600;
+}
+
+.rulesBtn {
+  border: 1px solid #dab7ce !important;
+  background: #fdf7fb !important;
+  color: #581845 !important;
+  font-weight: 600;
+}
+
+@media (max-width: 1200px) {
+  .roomsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .roomsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .heroTitle {
+    font-size: 20px;
+  }
+
+  .roomCoverWrap {
+    height: 180px;
+  }
+}

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   CCard,
   CCardBody,
-  CCardHeader,
   CRow,
   CCol,
   CSpinner,
@@ -16,10 +16,22 @@ import {
   CListGroup,
   CListGroupItem,
 } from '@coreui/react'
+import CIcon from '@coreui/icons-react'
+import { cilReload, cilArrowRight } from '@coreui/icons'
 import { fetchChatRooms } from 'src/api/chatrooms'
 import styles from './ChatRooms.module.css'
 
+const FALLBACK_COVERS = [
+  'https://images.unsplash.com/photo-1463592177119-bab2a00f3ccb?auto=format&fit=crop&w=1200&q=80',
+  'https://images.unsplash.com/photo-1484318571209-661cf29a69c3?auto=format&fit=crop&w=1200&q=80',
+  'https://images.unsplash.com/photo-1493962853295-0fd70327578a?auto=format&fit=crop&w=1200&q=80',
+  'https://images.unsplash.com/photo-1523805009345-7448845a9e53?auto=format&fit=crop&w=1200&q=80',
+  'https://images.unsplash.com/photo-1509099836639-18ba1795216d?auto=format&fit=crop&w=1200&q=80',
+  'https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=1200&q=80',
+]
+
 export default function ChatRooms() {
+  const navigate = useNavigate()
   const [rooms, setRooms] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -55,7 +67,19 @@ export default function ChatRooms() {
   }
 
   const openRoom = (roomId) => {
-    window.location.href = `/#/chatroom/${roomId}`
+    navigate(`/chatroom/${roomId}`)
+  }
+
+  const getCoverForRoom = (room, index) => {
+    const image = room?.image || room?.coverImage || room?.banner || ''
+    if (image) return image
+    return FALLBACK_COVERS[index % FALLBACK_COVERS.length]
+  }
+
+  const getRoomMeta = (room) => {
+    const members = room?.membersCount || room?.memberCount || room?.participantsCount || room?.usersCount || 0
+    const text = Number(members) > 0 ? `${members} members` : 'Open community room'
+    return text
   }
 
   if (loading) return <div className="text-center mt-4"><CSpinner /></div>
@@ -65,24 +89,42 @@ export default function ChatRooms() {
     <>
       <CRow className="mb-3">
         <CCol xs={12}>
-          <CCard>
-            <CCardHeader>
-              <strong>Community Chat Rooms</strong>
-            </CCardHeader>
-            <CCardBody>
+          <CCard className={styles.chatRoomsCard}>
+            <CCardBody className={styles.chatRoomsBody}>
+              <div className={styles.heroBar}>
+                <div>
+                  <h4 className={styles.heroTitle}>Community Chatrooms</h4>
+                  <p className={styles.heroSubtitle}>Join trending conversations across the 34th Street community</p>
+                </div>
+                <CButton color="light" className={styles.refreshBtn} onClick={loadRooms}>
+                  <CIcon icon={cilReload} />
+                </CButton>
+              </div>
+
               <div className={styles.roomsGrid}>
-                {rooms.map((room) => (
-                  <div className={styles.roomCard} key={room._id || room.id} onClick={() => openRoom(room._id || room.id)}>
-                    <div className={styles.roomBg} style={{ backgroundImage: `url(${room.image || ''})` }} />
-                    <div className={styles.roomOverlay}>
-                      <h5>{room.name}</h5>
-                      <p className="small text-muted">{room.description}</p>
-                      <div className="d-flex gap-2">
-                        <CButton size="sm" color="light">Enter</CButton>
+                {rooms.map((room, index) => (
+                  <div className={styles.roomCard} key={room._id || room.id}>
+                    <div className={styles.roomCoverWrap}>
+                      <img
+                        src={getCoverForRoom(room, index)}
+                        alt={room?.name || 'Chatroom'}
+                        className={styles.roomCover}
+                      />
+                      <div className={styles.roomCoverOverlay} />
+                    </div>
+
+                    <div className={styles.roomContent}>
+                      <h5 className={styles.roomName}>{room.name || 'Community Room'}</h5>
+                      <p className={styles.roomDescription}>{room.description || 'Connect and chat with like-minded members.'}</p>
+                      <p className={styles.roomMeta}>{getRoomMeta(room)}</p>
+
+                      <div className={styles.actionRow}>
+                        <CButton size="sm" className={styles.enterBtn} onClick={() => openRoom(room._id || room.id)}>
+                          Enter Room <CIcon icon={cilArrowRight} size="sm" />
+                        </CButton>
                         <CButton
                           size="sm"
-                          color="dark"
-                          variant="outline"
+                          className={styles.rulesBtn}
                           onClick={(e) => {
                             e.stopPropagation()
                             setSelectedRoom(room)

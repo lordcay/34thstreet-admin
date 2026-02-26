@@ -4,8 +4,114 @@
 @use "@coreui/chartjs/scss/coreui-chartjs";
 @use "vendors/simplebar";
 
+:root,
+[data-coreui-theme="light"] {
+  --cui-primary: #581845;
+  --cui-primary-rgb: 88, 24, 69;
+  --cui-secondary: #7a245f;
+  --cui-secondary-rgb: 122, 36, 95;
+  --cui-success: #8b2a6b;
+  --cui-success-rgb: 139, 42, 107;
+  --cui-info: #6d2a58;
+  --cui-info-rgb: 109, 42, 88;
+  --cui-danger: #4a133a;
+  --cui-danger-rgb: 74, 19, 58;
+  --cui-link-color: #581845;
+  --cui-link-hover-color: #7a245f;
+
+  --cui-warning: #ffb60a;
+  --cui-warning-rgb: 255, 182, 10;
+
+  --cui-body-bg: #f6f2f8;
+  --cui-body-color: #2e2235;
+  --cui-secondary-color: #5a4a64;
+  --cui-emphasis-color: #581845;
+  --cui-heading-color: #581845;
+
+  --cui-tertiary-bg: #efe8f3;
+  --cui-secondary-bg: #ffffff;
+  --cui-border-color: #d6c9dd;
+
+  --cui-card-bg: #ffffff;
+  --cui-card-cap-bg: #f5eff8;
+  --cui-card-border-color: #d7cbde;
+
+  --cui-header-bg: #ffffff;
+  --cui-header-border-color: #d9cede;
+  --cui-footer-bg: #ffffff;
+  --cui-footer-border-color: #d9cede;
+
+  --cui-sidebar-bg: #581845;
+  --cui-sidebar-color: #f6e5f1;
+  --cui-sidebar-brand-bg: #4a133a;
+  --cui-sidebar-brand-color: #ffffff;
+  --cui-sidebar-border-color: #6d2a58;
+  --cui-sidebar-nav-link-color: #f6e5f1;
+  --cui-sidebar-nav-link-hover-color: #ffffff;
+  --cui-sidebar-nav-link-hover-bg: rgba(255, 182, 10, 0.16);
+  --cui-sidebar-nav-link-active-color: #2e2235;
+  --cui-sidebar-nav-link-active-bg: #ffb60a;
+  --cui-sidebar-toggler-bg: #4a133a;
+  --cui-sidebar-toggler-hover-bg: #ffb60a;
+}
+
 body {
   background-color: var(--cui-tertiary-bg);
+}
+
+.sidebar,
+.sidebar.sidebar-dark {
+  --cui-sidebar-bg: #3f1133;
+  --cui-sidebar-color: #f7edf5;
+  --cui-sidebar-brand-bg: #34102a;
+  --cui-sidebar-brand-color: #ffffff;
+  --cui-sidebar-border-color: #5f254d;
+  --cui-sidebar-nav-link-color: #f7edf5;
+  --cui-sidebar-nav-link-hover-color: #ffffff;
+  --cui-sidebar-nav-link-hover-bg: rgba(255, 182, 10, 0.18);
+  --cui-sidebar-nav-link-active-color: #221a28;
+  --cui-sidebar-nav-link-active-bg: #ffc13a;
+  --cui-sidebar-nav-title-color: #e9cfe0;
+  --cui-sidebar-nav-group-indicator-color: #f5dfec;
+  --cui-sidebar-toggler-bg: #34102a;
+  --cui-sidebar-toggler-hover-bg: #ffb60a;
+
+  background: linear-gradient(170deg, #2c0c24 0%, #581845 52%, #6c2355 82%, #8a4d3d 118%);
+}
+
+.sidebar.border-end {
+  border-color: #5f254d !important;
+}
+
+.sidebar .sidebar-header,
+.sidebar .sidebar-footer {
+  background: linear-gradient(135deg, rgba(44, 12, 36, 0.96) 0%, rgba(72, 20, 58, 0.96) 100%);
+}
+
+.sidebar .nav-link,
+.sidebar .nav-group-toggle,
+.sidebar .nav-title {
+  letter-spacing: 0.1px;
+}
+
+.sidebar .nav-link,
+.sidebar .nav-group-toggle {
+  color: #f7edf5;
+}
+
+.sidebar .nav-icon,
+.sidebar .nav-group-toggle .nav-icon {
+  color: #f2ddeb;
+}
+
+.sidebar .nav-link:hover,
+.sidebar .nav-group-toggle:hover {
+  color: #ffffff;
+}
+
+.sidebar .nav-link.active,
+.sidebar .nav-group.show > .nav-group-toggle {
+  font-weight: 600;
 }
 
 .wrapper {
@@ -57,8 +163,56 @@ body {
 }
 
 @include color-mode(dark) {
+  --cui-primary: #ffb60a;
+  --cui-primary-rgb: 255, 182, 10;
+  --cui-secondary: #d99808;
+  --cui-secondary-rgb: 217, 152, 8;
+  --cui-success: #ffcc57;
+  --cui-success-rgb: 255, 204, 87;
+  --cui-info: #f2b93f;
+  --cui-info-rgb: 242, 185, 63;
+  --cui-danger: #a96b06;
+  --cui-danger-rgb: 169, 107, 6;
+  --cui-link-color: #ffcc57;
+  --cui-link-hover-color: #ffd57a;
+
+  --cui-warning: #ffb60a;
+  --cui-warning-rgb: 255, 182, 10;
+
+  --cui-body-bg: #1f1320;
+  --cui-body-color: #efe3f2;
+  --cui-secondary-color: #c7b2cc;
+  --cui-emphasis-color: #ffcc57;
+  --cui-heading-color: #ffcc57;
+
+  --cui-tertiary-bg: #261728;
+  --cui-secondary-bg: #2a1b2d;
+  --cui-border-color: #4f3554;
+
+  --cui-card-bg: #2a1b2d;
+  --cui-card-cap-bg: #2f1f32;
+  --cui-card-border-color: #4f3554;
+
+  --cui-header-bg: #2a1b2d;
+  --cui-header-border-color: #4f3554;
+  --cui-footer-bg: #2a1b2d;
+  --cui-footer-border-color: #4f3554;
+
+  --cui-sidebar-bg: #120a14;
+  --cui-sidebar-color: #e8d8ec;
+  --cui-sidebar-brand-bg: #1a0f1d;
+  --cui-sidebar-brand-color: #ffcc57;
+  --cui-sidebar-border-color: #4f3554;
+  --cui-sidebar-nav-link-color: #e8d8ec;
+  --cui-sidebar-nav-link-hover-color: #ffffff;
+  --cui-sidebar-nav-link-hover-bg: rgba(255, 182, 10, 0.2);
+  --cui-sidebar-nav-link-active-color: #1f1320;
+  --cui-sidebar-nav-link-active-bg: #ffb60a;
+  --cui-sidebar-toggler-bg: #241328;
+  --cui-sidebar-toggler-hover-bg: #ffb60a;
+
   body {
-    background-color: var(--cui-dark-bg-subtle);
+    background-color: var(--cui-tertiary-bg);
   }
 
   .footer {

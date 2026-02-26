@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react'
 import { NavLink } from 'react-router-dom'
-import { useLocation } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import {
   CContainer,
@@ -26,18 +25,14 @@ import {
   cilSun,
 } from '@coreui/icons'
 
-import { AppBreadcrumb } from './index'
 import { AppHeaderDropdown } from './header/index'
 
 const AppHeader = () => {
   const headerRef = useRef()
-  const { pathname } = useLocation()
   const { colorMode, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
 
   const dispatch = useDispatch()
   const sidebarShow = useSelector((state) => state.sidebarShow)
-  const hideBreadcrumbOn = ['/home', '/user-profile/', '/private-chat/']
-  const showBreadcrumb = !hideBreadcrumbOn.some((routePrefix) => pathname.startsWith(routePrefix))
 
   useEffect(() => {
     const handleScroll = () => {
@@ -138,11 +133,6 @@ const AppHeader = () => {
           <AppHeaderDropdown />
         </CHeaderNav>
       </CContainer>
-      {showBreadcrumb && (
-        <CContainer className="px-4" fluid>
-          <AppBreadcrumb />
-        </CContainer>
-      )}
     </CHeader>
   )
 }
