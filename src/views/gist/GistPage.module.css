@@ -1,52 +1,115 @@
-.header {
+.pageShell {
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+.headerBar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #581845 0%, #7a275f 62%, #ffb60a 165%);
+  box-shadow: 0 10px 24px rgba(88, 24, 69, 0.18);
 }
 
-.header h2 {
+.pageTitle {
   margin: 0;
-  color: #222;
+  color: #fff;
+  font-size: clamp(26px, 3vw, 34px);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.pageSubtitle {
+  margin: 4px 0 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 13px;
+}
+
+.refreshBtn {
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: #fff !important;
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .gistCard {
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  border: 0;
+  box-shadow: 0 16px 36px rgba(17, 24, 39, 0.1);
   overflow: hidden;
+  background: #fff;
 }
 
 .imageContainer {
   width: 100%;
-  height: 300px;
-  background: linear-gradient(135deg, #581845 0%, #ffb60a 100%);
+  min-height: 280px;
+  max-height: 520px;
+  aspect-ratio: 16 / 7;
+  background: linear-gradient(135deg, #f8f3f8 0%, #f3ebf3 100%);
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .image {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center;
+}
+
+.contentTop {
+  margin-bottom: 10px;
+}
+
+.categoryBadge {
+  background: #f7eef5 !important;
+  color: #581845 !important;
+  border: 1px solid #e6d5e2;
+}
+
+.gistTitle {
+  margin: 10px 0 8px;
+  color: #2a2430;
+  font-size: clamp(30px, 4.1vw, 52px);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
 }
 
 .body {
   font-size: 16px;
-  line-height: 1.6;
-  color: #333;
+  line-height: 1.65;
+  color: #4a3f54;
+  margin: 0;
 }
 
 .countdown {
-  padding: 8px 0;
-  border-top: 1px solid #eee;
-  border-bottom: 1px solid #eee;
+  padding: 10px 0;
+  border-top: 1px solid #ece3ef;
+  border-bottom: 1px solid #ece3ef;
   margin-bottom: 16px;
 }
 
+.expireText {
+  color: #736582;
+  font-weight: 500;
+}
+
 .votingSection {
-  margin: 24px 0;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
+  margin: 18px 0;
+  padding: 14px;
+  background: #faf7fb;
+  border: 1px solid #e8ddea;
+  border-radius: 12px;
 }
 
 .voteButton {
@@ -57,15 +120,35 @@
   gap: 8px;
   padding: 12px;
   font-weight: 600;
+  border: 1px solid #d9c5de !important;
+  color: #584b62 !important;
+  background: #fff !important;
+}
+
+.voteButtonActive {
+  background: #581845 !important;
+  border-color: #581845 !important;
+  color: #fff !important;
+}
+
+.voteCountBadge {
+  background: #f7eff8 !important;
+  color: #2c2432 !important;
+  border: 1px solid #dfd2e4;
+  font-weight: 700;
 }
 
 .voteStats {
   margin-top: 16px;
 }
 
+.voteTotalText {
+  color: #6c5d7c;
+}
+
 .progressBar {
   height: 8px;
-  background-color: #eee;
+  background-color: #e8ddea;
   border-radius: 4px;
   overflow: hidden;
   margin-top: 8px;
@@ -74,18 +157,52 @@
 .progressFill {
   height: 100%;
   transition: width 0.3s ease;
+  background: linear-gradient(90deg, #581845 0%, #ffb60a 100%);
 }
 
 .commentsSection {
-  margin-top: 24px;
-  padding-top: 20px;
-  border-top: 1px solid #eee;
+  margin-top: 12px;
+  padding-top: 14px;
+  border-top: 1px solid #ece3ef;
+}
+
+.commentToggleBtn {
+  width: 100%;
+  margin-bottom: 12px;
+  border: 1px solid #d4b8d7 !important;
+  background: #fff !important;
+  color: #581845 !important;
+  font-weight: 600;
+}
+
+.commentInputWrap {
+  margin-bottom: 12px;
+}
+
+.commentInput {
+  border-color: #d8c6d7 !important;
+}
+
+.commentPostBtn {
+  background: #581845 !important;
+  border-color: #581845 !important;
+  color: #fff !important;
+}
+
+.commentList {
+  display: grid;
+  gap: 8px;
 }
 
 .commentItem {
   border-left: 3px solid #581845;
-  padding: 12px;
-  margin-bottom: 12px;
+  border-radius: 8px;
+  padding: 13px;
+  margin-bottom: 0;
+  background: #fff;
+  border-top: 1px solid #f0e8f2;
+  border-right: 1px solid #f0e8f2;
+  border-bottom: 1px solid #f0e8f2;
 }
 
 .commentHeader {
@@ -96,11 +213,62 @@
   gap: 8px;
 }
 
+.commentAuthorButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.commentAuthorStatic {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.commentAuthorAvatar {
+  border: 1px solid #e4d4e6;
+}
+
 .commentHeader strong {
-  color: #222;
+  color: #2f2635;
   font-size: 14px;
 }
 
 .commentHeader small {
   font-size: 12px;
+  color: #7b6e88;
+}
+
+.commentText {
+  margin: 8px 0 0;
+  color: #4f4559;
+}
+
+.emptyComments {
+  text-align: center;
+  padding: 16px 0;
+  color: #7b6e88;
+}
+
+@media (max-width: 768px) {
+  .headerBar {
+    padding: 12px;
+  }
+
+  .pageTitle {
+    font-size: 24px;
+  }
+
+  .gistTitle {
+    font-size: 34px;
+  }
+
+  .imageContainer {
+    min-height: 220px;
+    aspect-ratio: 4 / 3;
+  }
 }
