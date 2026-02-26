@@ -1,53 +1,322 @@
+.homePage {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.filterCard {
+  border: 0;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #581845 0%, #7a275f 62%, #ffb60a 165%);
+  box-shadow: 0 14px 32px rgba(88, 24, 69, 0.18);
+}
+
+.filterBody {
+  padding: 12px 14px;
+}
+
+.inputLabel {
+  color: #f6edf4;
+  font-size: 11px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  display: block;
+  letter-spacing: 0.2px;
+}
+
+.filterCard :global(.form-select),
+.filterCard :global(.form-control) {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 9px;
+  color: #232323;
+}
+
+.filterCard :global(.form-control::placeholder) {
+  color: #6f7785;
+  opacity: 1;
+}
+
+.filterCard :global(.form-control::-ms-input-placeholder) {
+  color: #6f7785;
+}
+
+.filterActionCol {
+  display: flex;
+  align-items: flex-end;
+  justify-content: stretch;
+}
+
+.filterActionsInline {
+  width: 100%;
+  display: flex;
+  gap: 6px;
+}
+
+.refreshFilterBtn {
+  width: 34px;
+  height: 31px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  color: #fff !important;
+}
+
+.refreshFilterBtn:hover {
+  background: rgba(255, 255, 255, 0.24) !important;
+}
+
+.clearFilterBtn {
+  flex: 1;
+  min-width: 76px;
+  height: 31px;
+  background: rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  color: #fff !important;
+  font-weight: 600;
+}
+
+.clearFilterBtn:hover {
+  background: rgba(255, 255, 255, 0.24) !important;
+}
+
+.filterMetaRow {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.resultText {
+  color: #fdeef8;
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.gridScroll {
+  max-height: calc(100vh - 230px);
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.usersGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
 .userCard {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-radius: 12px;
+  border: 0;
+  border-radius: 14px;
   overflow: hidden;
   background: #fff;
+  box-shadow: 0 10px 24px rgba(25, 35, 70, 0.08);
+  height: 100%;
 }
 
 .photoContainer {
+  position: relative;
   width: 100%;
-  height: 400px;
-  background: linear-gradient(135deg, #581845 0%, #ffb60a 100%);
-  overflow: hidden;
+  height: 250px;
+  background: #120d12;
 }
 
 .photo {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+}
+
+.photoPlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #d6d1d6;
+  font-size: 13px;
+  letter-spacing: 0.2px;
+  background: linear-gradient(135deg, #2a1e28 0%, #46383d 100%);
+}
+
+.photoNavBtn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  border: 0;
+  background: rgba(10, 10, 10, 0.5);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.photoNavLeft {
+  left: 8px;
+}
+
+.photoNavRight {
+  right: 8px;
+}
+
+.photoDots {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+}
+
+.photoDot,
+.photoDotActive {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+}
+
+.photoDot {
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.photoDotActive {
+  background: #ffb60a;
+}
+
+.userCardBody {
+  display: flex;
+  flex-direction: column;
+  min-height: 190px;
+}
+
+.userName {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: #212529;
+}
+
+.userMeta {
+  margin: 4px 0 8px;
+  color: #6f7785;
+  font-size: 14px;
+}
+
+.userBio {
+  color: #3a3f48;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-bottom: 10px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.tagWrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
 }
 
 .tag {
-  display: inline-block;
-  background-color: #f0f2f5;
-  color: #333;
-  padding: 6px 12px;
-  border-radius: 20px;
-  margin-right: 8px;
-  margin-bottom: 8px;
-  font-size: 12px;
-  font-weight: 500;
-  border: 1px solid #eee;
-}
-
-.infoGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 16px;
-  padding: 16px 0;
-  border-top: 1px solid #eee;
-  border-bottom: 1px solid #eee;
-  margin: 16px 0;
-}
-
-.infoGrid div {
-  text-align: left;
-}
-
-.infoGrid p {
-  color: #222;
+  background: #f7eef5;
+  color: #581845;
+  border: 1px solid #e8d4e1;
+  border-radius: 999px;
+  padding: 4px 9px;
+  font-size: 11px;
   font-weight: 600;
-  font-size: 14px;
-  margin-top: 4px;
+}
+
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  color: #636d79;
+  font-size: 11px;
+  padding-top: 8px;
+  border-top: 1px solid #eef1f5;
+  margin-bottom: 10px;
+}
+
+.actionRow {
+  display: flex;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.profileBtn {
+  flex: 1;
+  background: #581845 !important;
+  border-color: #581845 !important;
+  color: #ffffff !important;
+  font-weight: 600;
+}
+
+.profileBtn:hover,
+.profileBtn:focus,
+.profileBtn:active {
+  background: #451338 !important;
+  border-color: #451338 !important;
+}
+
+.messageBtn {
+  flex: 1;
+  border-color: #ffb60a !important;
+  color: #6b4d02 !important;
+  background: #fff7df !important;
+  font-weight: 600;
+}
+
+@media (max-width: 992px) {
+  .gridScroll {
+    max-height: calc(100vh - 260px);
+  }
+
+  .photoContainer {
+    height: 220px;
+  }
+}
+
+@media (max-width: 768px) {
+  .usersGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .gridScroll {
+    max-height: none;
+    overflow: visible;
+    padding-right: 0;
+  }
+
+  .filterMetaRow {
+    margin-top: 6px;
+  }
+
+  .filterActionCol {
+    justify-content: flex-start;
+  }
+
+  .clearFilterBtn {
+    width: auto;
+    min-width: 84px;
+  }
+
+  .filterActionsInline {
+    width: auto;
+  }
+
+  .photoContainer {
+    height: 240px;
+  }
 }

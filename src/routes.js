@@ -40,6 +40,7 @@ const ChatRooms = React.lazy(() => import('./views/chatrooms/ChatRooms'))
 const ChatRoom = React.lazy(() => import('./views/chatrooms/ChatRoom'))
 const PrivateChat = React.lazy(() => import('./views/chat/PrivateChat'))
 const Profile = React.lazy(() => import('./views/profile/Profile'))
+const UserProfile = React.lazy(() => import('./views/profile/UserProfile'))
 const Users = React.lazy(() => import('./views/users/Users'))
 const Reports = React.lazy(() => import('./views/reports/Reports'))
 const Blocks = React.lazy(() => import('./views/blocks/Blocks'))
@@ -107,6 +108,15 @@ const routes = [
     element: () => (
       <ProtectedRoute>
         <PrivateChat />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/user-profile/:userId',
+    name: 'User Profile',
+    element: () => (
+      <ProtectedRoute>
+        <UserProfile />
       </ProtectedRoute>
     ),
   },
