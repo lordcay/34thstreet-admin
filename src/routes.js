@@ -30,9 +30,9 @@
 
 
 import React from 'react'
+import { Navigate } from 'react-router-dom'
 import ProtectedRoute from './components/ProtectedRoute'
 
-const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const HomePage = React.lazy(() => import('./views/homepage/HomePage'))
 const GistPage = React.lazy(() => import('./views/gist/GistPage'))
 const ChatPage = React.lazy(() => import('./views/chat/ChatPage'))
@@ -45,8 +45,6 @@ const Users = React.lazy(() => import('./views/users/Users'))
 const Reports = React.lazy(() => import('./views/reports/Reports'))
 const Blocks = React.lazy(() => import('./views/blocks/Blocks'))
 const StreetGist = React.lazy(() => import('./views/streetGist/StreetGist'))
-const Moderation = React.lazy(() => import('./views/moderation/Moderation'))
-const Analytics = React.lazy(() => import('./views/analytics/Analytics'))
 const Settings = React.lazy(() => import('./views/settings/Settings'))
 const Login = React.lazy(() => import('./views/auth/Login'))
 
@@ -132,17 +130,13 @@ const routes = [
   {
     path: '/dashboard',
     name: 'Dashboard',
-    element: () => (
-      <ProtectedRoute>
-        <Dashboard />
-      </ProtectedRoute>
-    ),
+    element: () => <Navigate to="/home" replace />,
   },
   {
     path: '/users',
     name: 'Users',
     element: () => (
-      <ProtectedRoute>
+      <ProtectedRoute requireAdmin>
         <Users />
       </ProtectedRoute>
     ),
@@ -151,7 +145,7 @@ const routes = [
     path: '/reports',
     name: 'Reports',
     element: () => (
-      <ProtectedRoute>
+      <ProtectedRoute requireAdmin>
         <Reports />
       </ProtectedRoute>
     ),
@@ -160,7 +154,7 @@ const routes = [
     path: '/blocks',
     name: 'Blocks',
     element: () => (
-      <ProtectedRoute>
+      <ProtectedRoute requireAdmin>
         <Blocks />
       </ProtectedRoute>
     ),
@@ -169,7 +163,7 @@ const routes = [
     path: '/street-gist',
     name: 'Street Gist',
     element: () => (
-      <ProtectedRoute>
+      <ProtectedRoute requireAdmin>
         <StreetGist />
       </ProtectedRoute>
     ),
@@ -177,20 +171,12 @@ const routes = [
   {
     path: '/moderation',
     name: 'Moderation',
-    element: () => (
-      <ProtectedRoute>
-        <Moderation />
-      </ProtectedRoute>
-    ),
+    element: () => <Navigate to="/home" replace />,
   },
   {
     path: '/analytics',
     name: 'Analytics',
-    element: () => (
-      <ProtectedRoute>
-        <Analytics />
-      </ProtectedRoute>
-    ),
+    element: () => <Navigate to="/home" replace />,
   },
   {
     path: '/settings',

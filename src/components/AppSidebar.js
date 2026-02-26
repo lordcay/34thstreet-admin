@@ -12,6 +12,7 @@ import {
 import CIcon from '@coreui/icons-react'
 
 import { AppSidebarNav } from './AppSidebarNav'
+import { isCurrentUserAdmin } from 'src/utils/auth'
 
 import logo from 'src/assets/brand/logo.png'
 import sygnet from 'src/assets/brand/logo.png' // or another png if you have one
@@ -24,6 +25,14 @@ const AppSidebar = () => {
   const dispatch = useDispatch()
   const unfoldable = useSelector((state) => state.sidebarUnfoldable)
   const sidebarShow = useSelector((state) => state.sidebarShow)
+  const isAdmin = isCurrentUserAdmin()
+
+  const adminOnlyPaths = ['/users', '/reports', '/blocks', '/street-gist']
+  const filteredNavigation = navigation.filter((item) => {
+    if (!item?.to) return true
+    if (isAdmin) return true
+    return !adminOnlyPaths.includes(item.to)
+  })
 
   return (
     <CSidebar
@@ -56,7 +65,7 @@ const AppSidebar = () => {
           onClick={() => dispatch({ type: 'set', sidebarShow: false })}
         />
       </CSidebarHeader>
-      <AppSidebarNav items={navigation} />
+      <AppSidebarNav items={filteredNavigation} />
       <CSidebarFooter className="border-top d-none d-lg-flex">
         <CSidebarToggler
           onClick={() => dispatch({ type: 'set', sidebarUnfoldable: !unfoldable })}

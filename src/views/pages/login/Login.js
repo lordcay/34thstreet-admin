@@ -37,8 +37,16 @@ export default function Login() {
 
       localStorage.setItem('adminToken', token)
 
+      const user = res.data?.user || res.data?.account || null
+      if (user && typeof user === 'object') {
+        const serialized = JSON.stringify(user)
+        localStorage.setItem('adminUser', serialized)
+        localStorage.setItem('user', serialized)
+        localStorage.setItem('currentUser', serialized)
+      }
+
       // ✅ HashRouter redirect
-      window.location.href = '/#/reports'
+      window.location.href = '/#/home'
     } catch (err) {
       console.error(err)
       setError(err?.response?.data?.message || 'Invalid login credentials')

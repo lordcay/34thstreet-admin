@@ -48,3 +48,65 @@ export const getCurrentUserName = () => {
   }
   return 'User'
 }
+
+const parseStoredUser = () => {
+  const userJsonKeys = ['adminUser', 'user', 'currentUser']
+  for (const key of userJsonKeys) {
+    const raw = localStorage.getItem(key)
+    if (!raw) continue
+    try {
+      const parsed = JSON.parse(raw)
+      if (parsed && typeof parsed === 'object') return parsed
+    } catch {
+      // ignore malformed JSON
+    }
+  }
+  return null
+}
+
+const decodeJwtPayload = (token) => {
+  if (!token || typeof token !== 'string') return null
+  const parts = token.split('.')
+  if (parts.length < 2) return null
+
+  try {
+    const base64 = parts[1].replace(/-/g, '+').replace(/_/g, '/')
+    const padded = base64.padEnd(base64.length + ((4 - (base64.length % 4)) % 4), '=')
+    const json = atob(padded)
+    return JSON.parse(json)
+  } catch {
+    return null
+  }
+}
+
+export const getCurrentUserRole = () => {
+  const user = parseStoredUser()
+  if (user?.isAdmin === true || user?.admin === true) return 'admin'
+  const roleFromUser =
+    user?.role ||
+    user?.userRole ||
+    user?.accountType ||
+    user?.type ||
+    user?.currentRole ||
+    (Array.isArray(user?.roles) ? user.roles[0] : user?.roles)
+
+  if (roleFromUser) return String(roleFromUser).toLowerCase()
+
+  const token = localStorage.getItem('adminToken') || localStorage.getItem('token')
+  const payload = decodeJwtPayload(token)
+  if (payload?.isAdmin === true || payload?.admin === true) return 'admin'
+  const roleFromToken =
+    payload?.role ||
+    payload?.userRole ||
+    payload?.accountType ||
+    payload?.type ||
+    payload?.currentRole ||
+    (Array.isArray(payload?.roles) ? payload.roles[0] : payload?.roles)
+
+  return roleFromToken ? String(roleFromToken).toLowerCase() : ''
+}
+
+export const isCurrentUserAdmin = () => {
+  const role = getCurrentUserRole()
+  return role === 'admin' || role === 'superadmin' || role === 'super_admin'
+}

@@ -1,7 +1,6 @@
 import React from 'react'
 import CIcon from '@coreui/icons-react'
 import {
-  cilSpeedometer,
   cilHome,
   cilPeople,
   cilBell,
@@ -11,18 +10,9 @@ import {
   cilUser,
   cilBan,
   cilSettings,
-  cilShieldAlt,
-  cilChart,
 } from '@coreui/icons'
 
 const _nav = [
-  {
-    component: 'CNavItem',
-    name: 'Dashboard',
-    to: '/dashboard',
-    icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
-  },
-
   {
     component: 'CNavTitle',
     name: 'Community',
@@ -85,23 +75,6 @@ const _nav = [
     name: 'Street Gist',
     to: '/street-gist',
     icon: <CIcon icon={cilSpeech} customClassName="nav-icon" />,
-  },
-  {
-    component: 'CNavItem',
-    name: 'Moderation',
-    to: '/moderation',
-    icon: <CIcon icon={cilShieldAlt} customClassName="nav-icon" />,
-  },
-
-  {
-    component: 'CNavTitle',
-    name: 'Admin',
-  },
-  {
-    component: 'CNavItem',
-    name: 'Analytics',
-    to: '/analytics',
-    icon: <CIcon icon={cilChart} customClassName="nav-icon" />,
   },
   {
     component: 'CNavItem',
