@@ -91,6 +91,7 @@ export default function Users() {
       'Last Name': user.lastName || '',
       Email: user.email || '',
       Phone: user.phone || '',
+      City: user.currentCity || '',
       Type: user.type || '',
       Gender: user.gender || '',
       Verified: user.verified ? 'Yes' : 'No',
@@ -253,6 +254,7 @@ export default function Users() {
                       <th style={{ border: '1px solid #ddd', padding: '8px' }}>Name</th>
                       <th style={{ border: '1px solid #ddd', padding: '8px' }}>Email</th>
                       <th style={{ border: '1px solid #ddd', padding: '8px' }}>Phone</th>
+                      <th style={{ border: '1px solid #ddd', padding: '8px' }}>City</th>
                       <th style={{ border: '1px solid #ddd', padding: '8px' }}>Type</th>
                       <th style={{ border: '1px solid #ddd', padding: '8px' }}>Status</th>
                       <th style={{ border: '1px solid #ddd', padding: '8px' }}>Created</th>
@@ -266,6 +268,7 @@ export default function Users() {
                         </td>
                         <td style={{ border: '1px solid #ddd', padding: '8px' }}>{user.email}</td>
                         <td style={{ border: '1px solid #ddd', padding: '8px' }}>{user.phone || '-'}</td>
+                        <td style={{ border: '1px solid #ddd', padding: '8px' }}>{user.currentCity || '-'}</td>
                         <td style={{ border: '1px solid #ddd', padding: '8px' }}>{user.type || '-'}</td>
                         <td style={{ border: '1px solid #ddd', padding: '8px' }}>
                           {user.verified ? 'Verified' : 'Pending'}
@@ -286,6 +289,7 @@ export default function Users() {
                     <CTableHeaderCell style={{ width: '200px' }}>Name</CTableHeaderCell>
                     <CTableHeaderCell style={{ width: '220px' }}>Email</CTableHeaderCell>
                     <CTableHeaderCell style={{ width: '120px' }}>Phone</CTableHeaderCell>
+                    <CTableHeaderCell style={{ width: '130px' }}>City</CTableHeaderCell>
                     <CTableHeaderCell style={{ width: '100px' }}>Type</CTableHeaderCell>
                     <CTableHeaderCell style={{ width: '100px' }}>Gender</CTableHeaderCell>
                     <CTableHeaderCell style={{ width: '110px' }} className="text-center">
@@ -310,6 +314,9 @@ export default function Users() {
                       </CTableDataCell>
                       <CTableDataCell>
                         <small>{user.phone || '-'}</small>
+                      </CTableDataCell>
+                      <CTableDataCell>
+                        <small>{user.currentCity || '-'}</small>
                       </CTableDataCell>
                       <CTableDataCell>
                         <small>{user.type || '-'}</small>

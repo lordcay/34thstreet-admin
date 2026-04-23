@@ -10,6 +10,8 @@ import {
   cilUser,
   cilBan,
   cilSettings,
+  cilBriefcase,
+  cilInbox,
 } from '@coreui/icons'
 
 const _nav = [
@@ -61,9 +63,27 @@ const _nav = [
   },
   {
     component: 'CNavItem',
+    name: 'Services',
+    to: '/services',
+    icon: <CIcon icon={cilBriefcase} customClassName="nav-icon" />,
+  },
+  {
+    component: 'CNavItem',
     name: 'Blocks',
     to: '/blocks',
     icon: <CIcon icon={cilBan} customClassName="nav-icon" />,
+  },
+  {
+    component: 'CNavItem',
+    name: 'School Requests',
+    to: '/school-requests',
+    icon: <CIcon icon={cilInbox} customClassName="nav-icon" />,
+  },
+  {
+    component: 'CNavItem',
+    name: 'Alumni Requests',
+    to: '/alumni-requests',
+    icon: <CIcon icon={cilPeople} customClassName="nav-icon" />,
   },
 
   {

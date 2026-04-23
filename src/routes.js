@@ -44,8 +44,11 @@ const UserProfile = React.lazy(() => import('./views/profile/UserProfile'))
 const Users = React.lazy(() => import('./views/users/Users'))
 const Reports = React.lazy(() => import('./views/reports/Reports'))
 const Blocks = React.lazy(() => import('./views/blocks/Blocks'))
+const Services = React.lazy(() => import('./views/services/Services'))
 const StreetGist = React.lazy(() => import('./views/streetGist/StreetGist'))
 const Settings = React.lazy(() => import('./views/settings/Settings'))
+const SchoolRequests = React.lazy(() => import('./views/schoolRequests/SchoolRequests'))
+const AlumniRequests = React.lazy(() => import('./views/alumniRequests/AlumniRequests'))
 const Login = React.lazy(() => import('./views/auth/Login'))
 
 const routes = [
@@ -156,6 +159,33 @@ const routes = [
     element: () => (
       <ProtectedRoute requireAdmin>
         <Blocks />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/services',
+    name: 'Services',
+    element: () => (
+      <ProtectedRoute requireAdmin>
+        <Services />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/school-requests',
+    name: 'School Requests',
+    element: () => (
+      <ProtectedRoute requireAdmin>
+        <SchoolRequests />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/alumni-requests',
+    name: 'Alumni Requests',
+    element: () => (
+      <ProtectedRoute requireAdmin>
+        <AlumniRequests />
       </ProtectedRoute>
     ),
   },
